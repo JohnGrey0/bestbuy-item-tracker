@@ -6,7 +6,8 @@ This was created to track out of stock items from best buy and notify me via tex
 - Twilio
 - Bestbuy API token
 
-# Environment variables needed if you wish to use it as-is. Add to your zprofile/bash_profile/windows environment before using.
+# Environment variables needed if you wish to use it as-is.
+Add to your zprofile/bash_profile/windows environment before using.
 - TWILIO_FROM_NUMBER="+##########"
 - TWILIO_ACCOUNT_SID="<YOUR_SID>"
 - TWILIO_AUTH_TOKEN="<YOUR_AUTH_TOKEN>
