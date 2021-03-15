@@ -19,4 +19,5 @@ The items are hardcoded in an dictionary as the url is super long. You will have
 - python -m main -i "3080"
 - python -m main -i "xbox"
 
-![bestbuy_tracker copy](https://user-images.githubusercontent.com/46507986/111192981-0de79e00-8590-11eb-8df9-c7d5874a3b3f.gif)
+https://user-images.githubusercontent.com/46507986/111193492-98300200-8590-11eb-85a8-d0e5f39d9495.mp4
+
