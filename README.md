@@ -32,6 +32,8 @@ Add to your zprofile/bash_profile/windows environment before using.
 
 # Usage
 The items are hardcoded in an dictionary as the url is super long. You will have to modify the list for different products.
+
+Please use this url to build your own query - https://bestbuyapis.github.io/bby-query-builder/#/productSearch
 - python -m main -i "3070"
 - python -m main -i "3080"
 - python -m main -i "xbox"
