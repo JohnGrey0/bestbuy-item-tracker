@@ -1,5 +1,10 @@
 # bestbuy-item-tracker
 This was created to track out of stock items from best buy and notify me via text when anything is restocked.
+Logical steps of the program
+1) Send request to api
+2) Check request from api for in stock products
+3) Notify user via text for each in stock product
+4) Repeat every 10 seconds until items are in stock then sleep for 10 minutes
 
 # Requirements
 - Python 3
