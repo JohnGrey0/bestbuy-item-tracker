@@ -3,8 +3,12 @@ This was created to track out of stock items from best buy and notify me via tex
 
 # Requirements
 - Python 3
-- Twilio
 - Bestbuy API token
+
+## Modules needed
+```python3 -m pip install -r requirements.txt```
+- Twilio
+- Requests
 
 # Environment variables needed if you wish to use it as-is.
 Add to your zprofile/bash_profile/windows environment before using.
