@@ -19,5 +19,5 @@ The items are hardcoded in an dictionary as the url is super long. You will have
 - python -m main -i "3080"
 - python -m main -i "xbox"
 
-https://user-images.githubusercontent.com/46507986/111193492-98300200-8590-11eb-85a8-d0e5f39d9495.mp4
+![](https://user-images.githubusercontent.com/46507986/111193492-98300200-8590-11eb-85a8-d0e5f39d9495.mp4)
 
