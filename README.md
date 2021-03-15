@@ -1,19 +1,26 @@
 # bestbuy-item-tracker
 This was created to track out of stock items from best buy and notify me via text when anything is restocked.
+
 Logical steps of the program
 1) Send request to api
 2) Check request from api for in stock products
 3) Notify user via text for each in stock product
 4) Repeat every 10 seconds until items are in stock then sleep for 10 minutes
 
-# Requirements
-- Python 3
-- Bestbuy API token
-
-## Modules needed
+# Python module requirements
 ```python3 -m pip install -r requirements.txt```
 - Twilio
 - Requests
+
+# Twilio requirements
+https://www.twilio.com/
+- Phone number
+- SID
+- Auth Token
+
+# Bestbuy requirements
+You will need to get a key from here - https://developer.bestbuy.com/
+- API Key
 
 # Environment variables needed if you wish to use it as-is.
 Add to your zprofile/bash_profile/windows environment before using.
@@ -21,9 +28,6 @@ Add to your zprofile/bash_profile/windows environment before using.
 - TWILIO_ACCOUNT_SID="<YOUR_SID>"
 - TWILIO_AUTH_TOKEN="<YOUR_AUTH_TOKEN>
 - BEST_BUY_API_TOKEN="<BESTBUY_API_TOKEN>
-
-# Bestbuy Query Builder
-- https://bestbuyapis.github.io/bby-query-builder/#/productSearch
 
 # Usage
 The items are hardcoded in an dictionary as the url is super long. You will have to modify the list for different products.
