@@ -26,9 +26,9 @@ https://developer.bestbuy.com/
 Add to your zprofile/bash_profile/windows environment before using.
 - TWILIO_FROM_NUMBER="+###########"
 - TWILIO_ACCOUNT_SID="<YOUR_SID>"
-- TWILIO_AUTH_TOKEN="<YOUR_AUTH_TOKEN>
+- TWILIO_AUTH_TOKEN="<YOUR_AUTH_TOKEN>"
 - MY_PHONE="+###########"
-- BEST_BUY_API_TOKEN="<BESTBUY_API_TOKEN>
+- BEST_BUY_API_TOKEN="<BESTBUY_API_TOKEN>"
 
 # Usage
 The items are hardcoded in an dictionary as the url is super long. You will have to modify the list for different products.
