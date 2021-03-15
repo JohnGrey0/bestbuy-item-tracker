@@ -1,0 +1,2 @@
+twilio==6.53.0
+requests==2.22.0
