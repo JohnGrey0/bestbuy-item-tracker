@@ -15,7 +15,7 @@ Logical steps of the program
 # Twilio requirements
 https://www.twilio.com/
 - Phone number
-- SID
+- Account SID
 - Auth Token
 
 # Bestbuy requirements
