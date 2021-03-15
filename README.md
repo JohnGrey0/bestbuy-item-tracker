@@ -24,10 +24,10 @@ https://developer.bestbuy.com/
 
 # Environment variables needed if you wish to use it as-is.
 Add to your zprofile/bash_profile/windows environment before using.
-- TWILIO_FROM_NUMBER="+##########"
+- TWILIO_FROM_NUMBER="+###########"
 - TWILIO_ACCOUNT_SID="<YOUR_SID>"
 - TWILIO_AUTH_TOKEN="<YOUR_AUTH_TOKEN>
-- MY_PHONE="+##########"
+- MY_PHONE="+###########"
 - BEST_BUY_API_TOKEN="<BESTBUY_API_TOKEN>
 
 # Usage
