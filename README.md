@@ -3,7 +3,7 @@ This was created to track out of stock items from best buy and notify me via tex
 
 Logical steps of the program
 1) Send request to api
-2) Check request from api for in stock products
+2) Check response for in stock products
 3) Notify user via text for each in stock product
 4) Repeat every 10 seconds until items are in stock then sleep for 10 minutes
 
@@ -19,7 +19,7 @@ https://www.twilio.com/
 - Auth Token
 
 # Bestbuy requirements
-You will need to get a key from here - https://developer.bestbuy.com/
+https://developer.bestbuy.com/
 - API Key
 
 # Environment variables needed if you wish to use it as-is.
@@ -27,6 +27,7 @@ Add to your zprofile/bash_profile/windows environment before using.
 - TWILIO_FROM_NUMBER="+##########"
 - TWILIO_ACCOUNT_SID="<YOUR_SID>"
 - TWILIO_AUTH_TOKEN="<YOUR_AUTH_TOKEN>
+- MY_PHONE="+##########"
 - BEST_BUY_API_TOKEN="<BESTBUY_API_TOKEN>
 
 # Usage
