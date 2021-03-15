@@ -8,7 +8,7 @@ Logical steps of the program
 4) Repeat every 10 seconds until items are in stock then sleep for 10 minutes
 
 # Python module requirements
-```python3 -m pip install -r requirements.txt```
+```python -m pip install -r requirements.txt```
 - Twilio
 - Requests
 
