@@ -18,3 +18,5 @@ The items are hardcoded in an dictionary as the url is super long. You will have
 - python -m main -i "3070"
 - python -m main -i "3080"
 - python -m main -i "xbox"
+
+<image src="https://imgur.com/a/V2Wx0Ci" width="480" height="94"/>
