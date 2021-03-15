@@ -17,6 +17,9 @@ Add to your zprofile/bash_profile/windows environment before using.
 - TWILIO_AUTH_TOKEN="<YOUR_AUTH_TOKEN>
 - BEST_BUY_API_TOKEN="<BESTBUY_API_TOKEN>
 
+# Bestbuy Query Builder
+- https://bestbuyapis.github.io/bby-query-builder/#/productSearch
+
 # Usage
 The items are hardcoded in an dictionary as the url is super long. You will have to modify the list for different products.
 - python -m main -i "3070"
