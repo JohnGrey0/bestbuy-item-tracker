@@ -20,12 +20,26 @@ def get_product_info_from_api(url):
     url = url.format(api_key=getenv("BEST_BUY_API_TOKEN"))
     response = requests.get(url)
     if response.status_code == 200:
-        return response.json().get("products", None)
-    return None
+        return response.json().get("products", None), response.status_code
+    return None, response.status_code
 
 
 def is_item_stocked(url):
-    products = get_product_info_from_api(url)
+    try:
+        products, status_code = get_product_info_from_api(url)
+    except Exception as e:
+        print("Something went wrong, going to retry again{}".format(e))
+    
+    if status_code != 200:
+        for i in range(0, 4):
+            try:
+                products, status_code = get_product_info_from_api(url)
+                if status_code == 200:
+                    break
+                else:
+                    time.sleep(5)
+            except Exception as e:
+                print("Something went wrong, going to retry again{}".format(e))
     anything_stocked = False
     if products is not None:
         products = sorted(products, key=lambda k: k['salePrice'])
@@ -65,6 +79,11 @@ if __name__ == "__main__":
     url = items[item] if item in valid_items else None
 
     if url is not None:
+        delay = 10
+        calls_per_second = round(1/delay, 2)
+        calls_per_minute = round(60/delay, 2)
+        max_calls_per_second = 5.0
+        max_calls_per_minute = round(50000/1440, 2)
         while True:
             print(datetime.now(), "- Checking availability of items...")
             if not is_available:
@@ -72,7 +91,9 @@ if __name__ == "__main__":
             else:
                 print("Items were available. Sleeping for 10 minutes")
                 time.sleep(600)
-            print("Sleeping for 10 seconds")
+            print("Calls per second - {0}/{1}".format(calls_per_second, max_calls_per_second))
+            print("Calls per minute - {0}/{1}".format(calls_per_minute, max_calls_per_minute))
+            print("Sleeping for {delay} seconds".format(delay=delay))
             time.sleep(10)
             clear_screen()
     else:
