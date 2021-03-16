@@ -25,6 +25,7 @@ def get_product_info_from_api(url):
 
 
 def is_item_stocked(url):
+    status_code = 0
     try:
         products, status_code = get_product_info_from_api(url)
     except Exception as e:
