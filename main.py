@@ -37,7 +37,7 @@ def is_item_stocked(url):
                 if status_code == 200:
                     break
                 else:
-                    time.sleep(5)
+                    time.sleep(900)
             except Exception as e:
                 print("Something went wrong, going to retry again{}".format(e))
     anything_stocked = False
