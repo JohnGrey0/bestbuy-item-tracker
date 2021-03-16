@@ -85,7 +85,7 @@ if __name__ == "__main__":
         max_calls_per_second = 5.0
         max_calls_per_minute = round(50000/1440, 2)
         while True:
-            print(datetime.now(), "- Checking availability of items...")
+            print("{} - Checking availability of items...".format(datetime.now()))
             if not is_available:
                 is_available = is_item_stocked(url)
             else:
