@@ -42,6 +42,6 @@ Please use this url to build your own query - https://bestbuyapis.github.io/bby-
 
 To run in the background and with no output
 
-```nohup python3 -m main -i "3080" &```
+```nohup python3 -u main.py -i "3080" &```
 
 <img width="1291" alt="Screen Shot 2021-03-15 at 1 19 56 PM" src="https://user-images.githubusercontent.com/46507986/111194088-3623cc80-8591-11eb-97c2-ead39b77f31c.png">
