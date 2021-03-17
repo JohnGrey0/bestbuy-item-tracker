@@ -43,7 +43,6 @@ def is_item_stocked(url):
                 print("Something went wrong, going to retry again{}".format(e))
     anything_stocked = False
     if products is not None:
-        products = sorted(products, key=lambda k: k['salePrice'])
         for product in products:
             print("{0:110} - {1:8} - {2:40} [{3:8}]".format(product["name"], "$"+str(product["salePrice"]),
                                                             product["addToCartUrl"], "IN STOCK" if product["onlineAvailability"] else "OUT OF STOCK"))
@@ -70,6 +69,7 @@ if __name__ == "__main__":
     is_available = False
     valid_items = ["3070", "3080", "xbox"]
     items = {
+        "gpus": "https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>400&salePrice<1000)?apiKey={api_key}&sort=onlineAvailability.dsc&show=name,salePrice,addToCartUrl,onlineAvailability&pageSize=100&format=json",
         "3080": "https://api.bestbuy.com/v1/products((search=RTX&search=3080)&categoryPath.id=abcat0507002)?apiKey={api_key}&sort=onlineAvailability.asc&show=addToCartUrl,accessories.sku,onlineAvailability,salePrice,regularPrice,mobileUrl,name&pageSize=100&format=json",
         "3070": "https://api.bestbuy.com/v1/products((search=RTX&search=3070)&categoryPath.id=abcat0507002)?apiKey={api_key}&sort=onlineAvailability.asc&show=addToCartUrl,accessories.sku,onlineAvailability,salePrice,regularPrice,mobileUrl,name&pageSize=100&format=json",
         "xbox": "https://api.bestbuy.com/v1/products(sku=6428324)?apiKey={api_key}&sort=onlineAvailability.asc&show=onlineAvailability,addToCartUrl,mobileUrl,name,salePrice&format=json"
