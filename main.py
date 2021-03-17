@@ -67,7 +67,7 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--item", type=str, help="product")
     args = parser.parse_args()
     is_available = False
-    valid_items = ["3070", "3080", "xbox"]
+    valid_items = ["3070", "3080", "xbox", "gpus"]
     items = {
         "gpus": "https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>400&salePrice<1000)?apiKey={api_key}&sort=onlineAvailability.dsc&show=name,salePrice,addToCartUrl,onlineAvailability&pageSize=100&format=json",
         "3080": "https://api.bestbuy.com/v1/products((search=RTX&search=3080)&categoryPath.id=abcat0507002)?apiKey={api_key}&sort=onlineAvailability.asc&show=addToCartUrl,accessories.sku,onlineAvailability,salePrice,regularPrice,mobileUrl,name&pageSize=100&format=json",
