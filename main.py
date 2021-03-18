@@ -26,6 +26,7 @@ def get_product_info_from_api(url):
 
 def is_item_stocked(url):
     status_code = 0
+    products = None
     try:
         products, status_code = get_product_info_from_api(url)
     except Exception as e:
@@ -34,11 +35,13 @@ def is_item_stocked(url):
     if status_code != 200:
         for i in range(0, 4):
             try:
+                print("Trying to get product info... Retry #{n}".format(n=i))
                 products, status_code = get_product_info_from_api(url)
                 if status_code == 200:
                     break
                 else:
-                    time.sleep(900)
+                    print("Sleeping for 20 minutes")
+                    time.sleep(1200)
             except Exception as e:
                 print("Something went wrong, going to retry again{}".format(e))
     anything_stocked = False
