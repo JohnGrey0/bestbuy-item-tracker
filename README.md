@@ -31,13 +31,9 @@ Add to your zprofile/bash_profile/windows environment before using.
 - BEST_BUY_API_TOKEN="<BESTBUY_API_TOKEN>"
 
 # Usage
-The flag items are hardcoded in a dictionary as the query builder url is super long. 
-
-You will have to modify the dictionary to add different products.
-
-Please use this url to build your own query - https://bestbuyapis.github.io/bby-query-builder/#/productSearch
 - python -m main -u "<INSERT_BEST_BUY_QUERY_BUILDER_URL>"
 
+Please use this url to build your own query - https://bestbuyapis.github.io/bby-query-builder/#/productSearch
 To run in the background and with no output
 
 ```nohup python -m main -u "<INSERT_BEST_BUY_QUERY_BUILDER_URL>" &```
