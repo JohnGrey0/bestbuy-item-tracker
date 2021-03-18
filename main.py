@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 from os import system, name, getenv
 from twilio.rest import Client
+from sys import exit
 
 
 def send_text(message):
@@ -17,88 +18,84 @@ def send_text(message):
 
 
 def get_product_info_from_api(url):
+    success_code = 200 # good to go
+    error_codes = [400, 403, 404, 405]
+    errors = {
+        400: "The request is missing key information or is malformed.",
+        403: "The API key is not valid, or the allocated call limit has been exceeded.",
+        404: "The requested item cannot be found.",
+        405: "Particular method not allowed (error will be returned for methods like a POST)."
+    }
+    server_side_codes = [500, 501, 503]
     url = url.format(api_key=getenv("BEST_BUY_API_TOKEN"))
     response = requests.get(url)
-    if response.status_code == 200:
-        return response.json().get("products", None), response.status_code
-    return None, response.status_code
+    status_code = response.status_code
+    if status_code == success_code:
+        return response.json().get("products", None), status_code
+    elif status_code in server_side_codes:
+        print("There is a server error on the Best Buy side.")
+    elif status_code in error_codes:
+        print("{} - {}".format(status_code, errors[status_code]))
+        send_text("Check bestbuy program. Shits broken.")
+        exit()
+    return None, status_code
 
 
-def is_item_stocked(url):
+def get_product_list(url):
     status_code = 0
     products = None
-    try:
-        products, status_code = get_product_info_from_api(url)
-    except Exception as e:
-        print("Something went wrong, going to retry again{}".format(e))
-    
-    if status_code != 200:
-        for i in range(0, 4):
-            try:
-                print("Trying to get product info... Retry #{n}".format(n=i))
-                products, status_code = get_product_info_from_api(url)
-                if status_code == 200:
-                    break
-                else:
-                    print("Sleeping for 20 minutes")
-                    time.sleep(1200)
-            except Exception as e:
-                print("Something went wrong, going to retry again{}".format(e))
-    anything_stocked = False
-    if products is not None:
-        for product in products:
-            print("{0:110} - {1:8} - {2:40} [{3:8}]".format(product["name"], "$"+str(product["salePrice"]),
-                                                            product["addToCartUrl"], "IN STOCK" if product["onlineAvailability"] else "OUT OF STOCK"))
-            if product["onlineAvailability"]:
-                message = "{name}\nAdd to cart: {addToCartUrl}\n${salePrice}\nURL: {mobileUrl}".format(
-                    **product)
-                send_text(message)
-                anything_stocked = True
-    return anything_stocked
+    counter = 0
+    max_retries = 24
+    sleep = 300
+    while status_code != 200 and products is None and counter < max_retries:
+        try:
+            print("{} - Checking products for availability attemp #{}...".format(str(datetime.now()), counter))
+            products, status_code = get_product_info_from_api(url)
+            counter += 1
+        except Exception as e:
+            counter += 1
+            time.sleep(sleep)
+    return products
 
 
-def clear_screen():
-    if name == 'nt':
-        _ = system('cls')
-    # for mac and linux os(The name is posix)
-    else:
-        _ = system('clear')
+def items_are_stocked(products):
+    is_stocked = False
+    for product in products:
+        print("{0:110} - {1:8} - {2:40} [{3:8}]".format(
+            product["name"],
+            "$"+str(product["salePrice"]),
+            product["addToCartUrl"],
+            "IN STOCK" if product["onlineAvailability"] else "OUT OF STOCK")
+            )
+        message = "{name}\nAdd to cart: {addToCartUrl}\n${salePrice}\nURL: {url}".format(**product)
+        if product["onlineAvailability"]:
+            send_text(message)
+            is_stocked = True
+    return is_stocked
 
+
+# https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>400&salePrice<1000)?apiKey={api_key}&sort=onlineAvailability.dsc&show=name,salePrice,addToCartUrl,onlineAvailability,url&pageSize=100&format=json
+# python3 redesign.py -u "https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>400&salePrice<1000)?apiKey={api_key}&sort=onlineAvailability.dsc&show=name,salePrice,addToCartUrl,onlineAvailability,url&pageSize=100&format=json"\
+# nohup python3 -u main.py -u "https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>400&salePrice<1000)?apiKey={api_key}&sort=onlineAvailability.dsc&show=name,salePrice,addToCartUrl,onlineAvailability,url&pageSize=100&format=json" &
+def main():
+    parser = argparse.ArgumentParser(description="which product to look for")
+    parser.add_argument("-u", "--url", type=str, help="url")
+    args = parser.parse_args()
+    url = args.url if args.url else None
+
+    if url is None:
+        print("URL argument is not added. Please add.")
+        exit()
+
+    delay = 10
+    delay_if_stocked = 900
+    while True:
+        products = get_product_list(url)
+        if items_are_stocked(products):
+            time.sleep(delay_if_stocked)
+        else:
+            print("No items are in stock. Rechecking in {} seconds...".format(delay))
+            time.sleep(delay)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="which product to look for")
-    parser.add_argument("-i", "--item", type=str, help="product")
-    args = parser.parse_args()
-    is_available = False
-    valid_items = ["3070", "3080", "xbox", "gpus"]
-    items = {
-        "gpus": "https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>400&salePrice<1000)?apiKey={api_key}&sort=onlineAvailability.dsc&show=name,salePrice,addToCartUrl,onlineAvailability&pageSize=100&format=json",
-        "3080": "https://api.bestbuy.com/v1/products((search=RTX&search=3080)&categoryPath.id=abcat0507002)?apiKey={api_key}&sort=onlineAvailability.asc&show=addToCartUrl,accessories.sku,onlineAvailability,salePrice,regularPrice,mobileUrl,name&pageSize=100&format=json",
-        "3070": "https://api.bestbuy.com/v1/products((search=RTX&search=3070)&categoryPath.id=abcat0507002)?apiKey={api_key}&sort=onlineAvailability.asc&show=addToCartUrl,accessories.sku,onlineAvailability,salePrice,regularPrice,mobileUrl,name&pageSize=100&format=json",
-        "xbox": "https://api.bestbuy.com/v1/products(sku=6428324)?apiKey={api_key}&sort=onlineAvailability.asc&show=onlineAvailability,addToCartUrl,mobileUrl,name,salePrice&format=json"
-    }
-
-    item = args.item if args.item else None
-
-    url = items[item] if item in valid_items else None
-
-    if url is not None:
-        delay = 10
-        calls_per_second = round(1/delay, 2)
-        calls_per_minute = round(60/delay, 2)
-        max_calls_per_second = 5.0
-        max_calls_per_minute = round(50000/1440, 2)
-        while True:
-            print("{} - Checking availability of items...".format(datetime.now()))
-            if not is_available:
-                is_available = is_item_stocked(url)
-            else:
-                print("Items were available. Sleeping for 10 minutes")
-                time.sleep(600)
-            print("Calls per second - {0}/{1}".format(calls_per_second, max_calls_per_second))
-            print("Calls per minute - {0}/{1}".format(calls_per_minute, max_calls_per_minute))
-            print("Sleeping for {delay} seconds".format(delay=delay))
-            time.sleep(10)
-            clear_screen()
-    else:
-        print("Invalid item choice. Please fix.")
+    main()
