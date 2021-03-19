@@ -28,7 +28,8 @@ Add to your zprofile/bash_profile/windows environment before using.
 - TWILIO_ACCOUNT_SID="<YOUR_SID>"
 - TWILIO_AUTH_TOKEN="<YOUR_AUTH_TOKEN>"
 - MY_PHONE="+###########"
-- BEST_BUY_API_TOKEN="<BESTBUY_API_TOKEN>"
+- BEST_BUY_API_TOKEN_1="<BESTBUY_API_TOKEN>"
+- BEST_BUY_API_TOKEN_2="<BESTBUY_API_TOKEN>"
 
 # Usage
 - python -m main -u "<INSERT_BEST_BUY_QUERY_BUILDER_URL>"
