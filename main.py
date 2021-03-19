@@ -43,12 +43,11 @@ def get_product_list(url):
     max_retries = 24
     sleep = 300
     while status_code != 200 and products is None and counter < max_retries:
+        counter += 1
         try:
-            print("{} - Checking products for availability attemp #{}...".format(str(datetime.now()), counter))
+            print("{} - Checking products for availability attempt #{}...".format(str(datetime.now()), counter))
             products, status_code = get_product_info_from_api(url)
-            counter += 1
         except Exception as e:
-            counter += 1
             time.sleep(sleep)
     return products
 
