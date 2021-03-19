@@ -1,6 +1,7 @@
 import argparse
 import requests
 import time
+from random import randint
 from datetime import datetime
 from os import system, name, getenv
 from twilio.rest import Client
@@ -17,27 +18,21 @@ def send_text(message):
     )
 
 
+def api_token_shuffle():
+    tokens = [
+        getenv("BEST_BUY_API_TOKEN_1"),
+        getenv("BEST_BUY_API_TOKEN_2")
+    ]
+    return tokens[randint(0, 1)]
+
+
 def get_product_info_from_api(url):
-    success_code = 200 # good to go
-    error_codes = [400, 403, 404, 405]
-    errors = {
-        400: "The request is missing key information or is malformed.",
-        403: "The API key is not valid, or the allocated call limit has been exceeded.",
-        404: "The requested item cannot be found.",
-        405: "Particular method not allowed (error will be returned for methods like a POST)."
-    }
-    server_side_codes = [500, 501, 503]
-    url = url.format(api_key=getenv("BEST_BUY_API_TOKEN"))
+    success_code = 200
+    url = url.format(api_key=api_token_shuffle())
     response = requests.get(url)
     status_code = response.status_code
     if status_code == success_code:
         return response.json().get("products", None), status_code
-    elif status_code in server_side_codes:
-        print("There is a server error on the Best Buy side.")
-    elif status_code in error_codes:
-        print("{} - {}".format(status_code, errors[status_code]))
-        send_text("Check bestbuy program. Shits broken.")
-        exit()
     return None, status_code
 
 
