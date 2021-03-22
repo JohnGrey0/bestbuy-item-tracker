@@ -1,6 +1,7 @@
 import argparse
 import requests
 import time
+import re
 from random import randint
 from datetime import datetime
 from os import system, name, getenv
@@ -55,14 +56,14 @@ def get_product_list(url):
 def items_are_stocked(products):
     is_stocked = False
     for product in products:
-        print("{0:110} - {1:8} - {2:40} [{3:8}]".format(
+        message = "{name}\nAdd to cart: {addToCartUrl}\n${salePrice}\nURL: {url}".format(**product)
+        if product["onlineAvailability"]:
+            print("{0:110} - {1:8} - {2:40} [{3:8}]".format(
             product["name"],
             "$"+str(product["salePrice"]),
             product["addToCartUrl"],
             "IN STOCK" if product["onlineAvailability"] else "OUT OF STOCK")
             )
-        message = "{name}\nAdd to cart: {addToCartUrl}\n${salePrice}\nURL: {url}".format(**product)
-        if product["onlineAvailability"]:
             send_text(message)
             is_stocked = True
     return is_stocked
