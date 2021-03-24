@@ -48,6 +48,8 @@ def get_product_list(url):
         try:
             print("{} - Checking products for availability attempt #{}...".format(str(datetime.now()), counter))
             products, status_code = get_product_info_from_api(url)
+            if products is None:
+                time.sleep(30)
         except Exception as e:
             time.sleep(sleep)
     return products
@@ -57,21 +59,27 @@ def items_are_stocked(products):
     is_stocked = False
     for product in products:
         message = "{name}\nAdd to cart: {addToCartUrl}\n${salePrice}\nURL: {url}".format(**product)
-        if product["onlineAvailability"]:
-            print("{0:110} - {1:8} - {2:40} [{3:8}]".format(
+        print("{0:115} - {1:8} - {2:40} [{3:8}]".format(
             product["name"],
             "$"+str(product["salePrice"]),
             product["addToCartUrl"],
             "IN STOCK" if product["onlineAvailability"] else "OUT OF STOCK")
             )
+        if product["onlineAvailability"]:
             send_text(message)
             is_stocked = True
     return is_stocked
 
 
-# https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>400&salePrice<1000)?apiKey={api_key}&sort=onlineAvailability.dsc&show=name,salePrice,addToCartUrl,onlineAvailability,url&pageSize=100&format=json
-# python3 redesign.py -u "https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>400&salePrice<1000)?apiKey={api_key}&sort=onlineAvailability.dsc&show=name,salePrice,addToCartUrl,onlineAvailability,url&pageSize=100&format=json"\
-# nohup python3 -u main.py -u "https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>400&salePrice<1000)?apiKey={api_key}&sort=onlineAvailability.dsc&show=name,salePrice,addToCartUrl,onlineAvailability,url&pageSize=100&format=json" &
+def change_delay():
+    start = 9
+    end = 13
+    current_hour = datetime.now().hour
+    return 2 if start <= current_hour <= end else 20
+
+# https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>100&salePrice<3000)?apiKey={api_key}&sort=onlineAvailability.asc&show=name,salePrice,addToCartUrl,onlineAvailability,url&pageSize=100&format=json
+# https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>100&salePrice<1200)?apiKey={api_key}&sort=onlineAvailability.asc&show=name,salePrice,addToCartUrl,onlineAvailability,url&pageSize=100&format=json
+# nohup python3 -um main -u "https://api.bestbuy.com/v1/products((search=RTX&search=30)&categoryPath.id=abcat0507002&salePrice>100&salePrice<1200)?apiKey={api_key}&sort=onlineAvailability.asc&show=name,salePrice,addToCartUrl,onlineAvailability,url&pageSize=100&format=json" &
 def main():
     parser = argparse.ArgumentParser(description="which product to look for")
     parser.add_argument("-u", "--url", type=str, help="url")
@@ -82,11 +90,12 @@ def main():
         print("URL argument is not added. Please add.")
         exit()
 
-    delay = 10
     delay_if_stocked = 900
     while True:
+        delay = change_delay()
         products = get_product_list(url)
         if items_are_stocked(products):
+            print("Items are stocked. Sleeping...")
             time.sleep(delay_if_stocked)
         else:
             print("No items are in stock. Rechecking in {} seconds...".format(delay))
