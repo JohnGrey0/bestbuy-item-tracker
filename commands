@@ -1,0 +1,11 @@
+Bestbuy
+
+cd /home/pi/Desktop/git/bestbuy-item-tracker
+Start - nohup python3 -um bestbuy_checker &
+Stop - sudo kill $(pgrep -f bestbuy_checker)
+
+Lululemon
+
+cd /home/pi/Desktop/git/bestbuy-item-tracker
+Start - nohup python3 -um lulu &
+Stop - sudo kill $(pgrep -f lulu)
